@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <title>Multi song / podcast player</title>
+
+  <!-- Foundation Framework CSS -->
+  <link rel="stylesheet" href="css/foundation.min.css">
+
+  <!-- Include font -->
+  <link href="https://fonts.googleapis.com/css?family=Lato:400,400i" rel="stylesheet">
+
+  <!-- Include Amplitude JS -->
+  <script type="text/javascript"
+    src="https://cdnjs.cloudflare.com/ajax/libs/amplitudejs/5.0.3/amplitude.min.js"></script>
+  <!-- Include Style Sheet -->
+  <link rel="stylesheet" type="text/css" href="css/app.css" />
+</head>
+
+<body style='background-color: #aed9e0;'>
+  <h2 style="text-align: center;">Multi song / podcast player</h2>
+  <div class='container'></div>
+  <div id="preload">
+    <img src="img/previous.svg" />
+    <img src="img/play.svg" />
+    <img src="img/pause.svg" />
+    <img src="img/next.svg" />
+  </div>
+  <script>
+    function createPlayer(idx) {
+      var myPlayer = '<div class="player">' +
+        '    <img style="margin-top: 1em;padding-left: 1em;" data-amplitude-song-info="cover_art_url" class="album-art" data-amplitude-song-index="' + idx + '"/>' +
+        '    <div class="meta-container">' +
+        '      <div data-amplitude-song-info="name" class="song-title" data-amplitude-song-index="' + idx + '"></div>' +
+        '' +
+        '      <div class="time-container">' +
+        '        <div class="current-time">' +
+        '          <span class="amplitude-current-minutes" data-amplitude-song-index="' + idx +
+        '"></span>:<span' +
+        '            class="amplitude-current-seconds" data-amplitude-song-index="' + idx +
+        '"></span>' +
+        '        </div>' +
+        '' +
+        '        <div class="duration">' +
+        '          <span class="amplitude-duration-minutes" data-amplitude-song-index="' + idx +
+        '"></span>:<span' +
+        '            class="amplitude-duration-seconds" data-amplitude-song-index="' + idx +
+        '"></span>' +
+        '        </div>' +
+        '      </div>' +
+        '      <progress class="amplitude-song-played-progress" data-amplitude-song-index="' + idx +
+        '"></progress>' +
+        '      <div class="control-container">' +
+        '        <div class="amplitude-prev">' +
+        '</div>' +
+        '        <div class="amplitude-play-pause" data-amplitude-song-index="' + idx + '">' +
+        '        </div>' +
+        '        <div class="amplitude-next">' +
+        '' +
+        '        </div>' +
+        '      </div>' +
+        '    </div>' +
+        '  </div>';
+      var target = document.querySelector('div.container');
+      target.insertAdjacentHTML('beforeend', myPlayer);
+    };
+    document.addEventListener('DOMContentLoaded', () => {
+
+      fetch('data.json')
+        .then(response => response.json())
+        .then(function (data) {
+          var amt = data['songs'].length
+          // console.log(amt);
+          for (var i = 0; i < amt; i++) {
+            createPlayer(i.toString());
+          };
+          Amplitude.init(data);
+        })
+    });
+  </script>
+</body>
+
+</html>
